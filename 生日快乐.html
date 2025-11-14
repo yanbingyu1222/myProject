@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生日快乐，[寿星昵称]！| 专属祝福</title>
+  <!-- 仅保留Tailwind CSS，确保加载稳定 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FF6B8B', // 主色调：温柔粉
+            secondary: '#FFD166', // 辅助色：暖黄
+            accent: '#06D6A0', // 强调色：生机绿
+            dark: '#118AB2', // 深色：静谧蓝
+            light: '#F8F9FA', // 浅色：纯净白
+          },
+          fontFamily: {
+            birthday: ['"Comic Sans MS"', '"Bubblegum Sans"', 'cursive'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+      .text-glow {
+        text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+      }
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+      .animate-pulse-slow {
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .perspective {
+        perspective: 1000px;
+      }
+      .preserve-3d {
+        transform-style: preserve-3d;
+      }
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+      .animate-confetti {
+        animation: confetti 5s ease-in-out infinite;
+      }
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes confetti {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 基础样式 - 更柔和的渐变 */
+    body {
+      overflow-x: hidden;
+      background: linear-gradient(135deg, #FFE6F0 0%, #FF6B8B 30%, #118AB2 100%);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    /* 粒子背景 - 更灵动的效果 */
+    #particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.7;
+      animation: particleMove 10s linear infinite;
+    }
+    
+    @keyframes particleMove {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+      }
+    }
+    
+    /* 烟花效果 - 更绚烂 */
+    .firework {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: firework 1s ease-out forwards;
+      box-shadow: 0 0 15px currentColor;
+    }
+    
+    @keyframes firework {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+    
+    /* 3D卡片翻转 - 完全重写修复版本 */
+    .card {
+      perspective: 1000px;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+    
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
+    }
+    
+    /* 正面朝前 */
+    .card-front {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      z-index: 2;
+    }
+    
+    /* 背面默认旋转180度，翻转时正好朝前 */
+    .card-back {
+      background: rgba(17, 138, 178, 0.3);
+      backdrop-filter: blur(12px);
+      transform: rotateY(180deg);
+      z-index: 1;
+    }
+    
+    /* 轻微脉冲动画 */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  /* 响应式设计 */
+  @media (max-width: 768px) {
+      /* 蛋糕响应式 */
+      .relative.max-w-md.mx-auto > div {
+        max-width: 80%;
+        margin: 0 auto;
+      }
+      
+      /* 卡片头像响应式 */
+      .card-front .w-24,
+      .card-front .h-24 {
+        width: 72px !important;
+        height: 72px !important;
+      }
+      
+      .card-front .w-16,
+      .card-front .h-16 {
+        width: 48px !important;
+        height: 48px !important;
+      }
+      
+      .card-front .text-4xl {
+        font-size: 2rem !important;
+      }
+      
+      .card-back .w-20,
+      .card-back .h-20 {
+        width: 56px !important;
+        height: 56px !important;
+      }
+      
+      .card-back .w-14,
+      .card-back .h-14 {
+        width: 40px !important;
+        height: 40px !important;
+      }
+      
+      .card-back .text-3xl {
+        font-size: 1.5rem !important;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* 蛋糕响应式 */
+      .relative.max-w-md.mx-auto > div {
+        max-width: 65%;
+        margin: 0 auto;
+      }
+      
+      /* 调整蜡烛大小 */
+      .candle-flame {
+        width: 2px !important;
+        height: 4px !important;
+      }
+    }
+    
+    /* 滚动动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 蛋糕蜡烛动画 - 更生动 */
+    .candle-flame {
+      animation: flame 1s ease-in-out infinite alternate;
+    }
+    
+    @keyframes flame {
+      0% {
+        transform: scale(0.9) translateY(-2px);
+        box-shadow: 0 0 10px #FFD166, 0 0 20px #FF6B8B, 0 0 30px #FF4757;
+      }
+      100% {
+        transform: scale(1.1) translateY(0);
+        box-shadow: 0 0 15px #FFD166, 0 0 25px #FF6B8B, 0 0 35px #FF4757;
+      }
+    }
+    
+    /* 礼物盒动画 - 更诱人 */
+    .gift-box:hover .gift-ribbon {
+      transform: translateY(-15px) scale(1.1);
+    }
+    
+    .gift-ribbon {
+      transition: transform 0.3s ease;
+    }
+    
+    .gift-box:hover {
+      transform: translateY(-5px);
+    }
+    
+    /* 昵称高亮动画 */
+    .name-highlight {
+      display: inline-block;
+      animation: nameBounce 2s ease-in-out infinite;
+      color: #FFD166;
+      text-shadow: 0 0 15px #FFD166, 0 0 25px #FF6B8B;
+    }
+    
+    @keyframes nameBounce {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+    
+    /* 许愿墙样式 */
+    .wish-item {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .wish-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* 替代Font Awesome图标 - 更可爱 */
+    .icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      position: relative;
+    }
+    
+    .icon-music::before {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 16px;
+      background: currentColor;
+      border-radius: 4px;
+      left: 4px;
+      top: 4px;
+    }
+    
+    .icon-music::after {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 12px;
+      background: currentColor;
+      border-radius: 4px;
+      left: 12px;
+      top: 8px;
+    }
+    
+    .icon-pause::before, .icon-pause::after {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 16px;
+      background: currentColor;
+      top: 4px;
+    }
+    
+    .icon-pause::before {
+      left: 4px;
+    }
+    
+    .icon-pause::after {
+      left: 14px;
+    }
+    
+    .icon-wind::before {
+      content: "💨";
+      font-size: 18px;
+    }
+    
+    .icon-calendar::before {
+      content: "📅";
+      font-size: 18px;
+    }
+    
+    .icon-gift::before {
+      content: "🎁";
+      font-size: 18px;
+    }
+    
+    .icon-money::before {
+      content: "💰";
+      font-size: 18px;
+    }
+    
+    .icon-diamond::before {
+      content: "💎";
+      font-size: 18px;
+    }
+    
+    .icon-star::before {
+      content: "⭐";
+      font-size: 18px;
+    }
+    
+    .icon-paper-plane::before {
+      content: "✈️";
+      font-size: 18px;
+    }
+    
+    .icon-share::before {
+      content: "🔗";
+      font-size: 18px;
+    }
+    
+    .icon-heart::before {
+      content: "❤️";
+      font-size: 18px;
+    }
+    
+    .icon-download::before {
+      content: "📥";
+      font-size: 18px;
+    }
+    
+    .icon-repeat::before {
+      content: "🔄";
+      font-size: 18px;
+    }
+    
+    .icon-check::before {
+      content: "✅";
+      font-size: 18px;
+    }
+    
+    .icon-crown::before {
+      content: "👑";
+      font-size: 18px;
+    }
+    
+    /* 彩带动画 */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: currentColor;
+      opacity: 0.8;
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    /* 礼物打开动画 */
+    .gift-open .gift-top {
+      transform: translateY(-30px) rotate(10deg);
+    }
+    
+    .gift-top {
+      transition: transform 0.5s ease;
+    }
+    
+    /* 模态框动画 */
+    .modal {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .modal.show {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+    
+    .modal-content {
+      transition: transform 0.3s ease;
+    }
+    
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+  </style>
+</head>
+<body class="font-birthday min-h-screen text-light">
+  <!-- 粒子背景 -->
+  <div id="particles"></div>
+  
+  <!-- 彩带动画容器 -->
+  <div id="confetti-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-20"></div>
+  
+  <!-- 音乐控制 -->
+  <div class="fixed top-4 right-4 z-50">
+    <button id="musicBtn" class="bg-white/20 backdrop-blur-md p-3 rounded-full shadow-lg hover:bg-white/40 transition-all duration-300">
+      <span class="icon icon-music text-2xl text-secondary text-glow"></span>
+    </button>
+  </div>
+  
+  <!-- 寿星标识 -->
+  <div class="fixed top-4 left-4 z-50 bg-primary/80 backdrop-blur-md rounded-full px-4 py-2 shadow-lg flex items-center">
+    <span class="icon icon-crown mr-2 text-secondary text-glow"></span>
+    <span class="font-bold text-light text-shadow" id="birthdayPerson">寿星</span>
+  </div>
+  
+  <!-- 主内容容器 -->
+  <div class="relative z-10 container mx-auto px-4 py-12">
+    <!-- 头部标题 - 突出寿星 -->
+    <header class="text-center mb-16 fade-in">
+      <h1 class="text-[clamp(3rem,10vw,6rem)] font-bold text-secondary text-glow mb-4 animate-float">
+        生日快乐，<span class="name-highlight" id="nameDisplay">亲爱的</span>！
+      </h1>
+      <p class="text-[clamp(1.2rem,3vw,1.8rem)] text-light text-shadow max-w-2xl mx-auto mb-8">
+        今天你是全世界最闪耀的主角，愿所有美好都为你而来
+      </p>
+      
+      <!-- 个性化日期卡片 -->
+      <div id="birthdayCountdown" class="mt-8 bg-white/10 backdrop-blur-md rounded-full px-6 py-3 inline-block shadow-lg border border-secondary/30">
+        <p class="text-[clamp(1rem,2vw,1.2rem)] flex items-center justify-center flex-wrap gap-2">
+          <span class="icon icon-calendar mr-2 text-accent"></span>
+          <span id="currentDate"></span> | 
+          <span class="ml-2 text-secondary font-bold" id="ageDisplay">开启新岁</span>
+        </p>
+      </div>
+      
+      <!-- 昵称输入框 - 让寿星自定义 -->
+      <div class="mt-8 max-w-md mx-auto">
+        <input type="text" id="nicknameInput" placeholder="输入你的昵称，让祝福更专属" 
+               class="bg-white/20 border border-secondary/50 rounded-full px-4 py-2 text-light placeholder-white/60 w-full text-center focus:outline-none focus:ring-2 focus:ring-secondary">
+        <div class="mt-2 text-light/70 text-sm">输入后回车确认</div>
+      </div>
+    </header>
+    
+    <!-- 蛋糕区域 - 互动核心 -->
+    <section class="mb-20 text-center fade-in">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] mb-8 text-secondary text-shadow">
+        吹灭蜡烛，开启你的<span class="name-highlight">专属</span>一年
+      </h2>
+      
+      <div class="relative max-w-md mx-auto">
+        <!-- 蛋糕图片 - 更温馨（CSS绘制） -->
+        <div class="relative z-10 animate-float">
+          <!-- CSS绘制的蛋糕 -->
+          <div class="w-full aspect-[3/2] rounded-xl shadow-2xl border-4 border-secondary/50 overflow-hidden relative">
+            <!-- 蛋糕底座 -->
+            <div class="absolute bottom-0 left-0 w-full h-1/3 bg-[#D2B48C] rounded-t-2xl"></div>
+            <!-- 蛋糕中间层 -->
+            <div class="absolute bottom-1/6 left-0 w-full h-1/3 bg-[#8B4513] rounded-t-2xl"></div>
+            <!-- 蛋糕顶层 -->
+            <div class="absolute bottom-2/6 left-0 w-full h-1/4 bg-[#A0522D] rounded-t-2xl"></div>
+            
+            <!-- 奶油装饰 -->
+            <div class="absolute bottom-1/3 left-0 w-full h-1/12 bg-[#FFF8DC] rounded-t-full"></div>
+            <div class="absolute bottom-2/6 left-0 w-full h-1/12 bg-[#FFF8DC] rounded-t-full"></div>
+            
+            <!-- 彩色糖霜点缀 -->
+            <div class="absolute bottom-[30%] left-[15%] w-3 h-3 bg-primary rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[25%] w-3 h-3 bg-secondary rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[35%] w-3 h-3 bg-accent rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[45%] w-3 h-3 bg-dark rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[55%] w-3 h-3 bg-primary rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[65%] w-3 h-3 bg-secondary rounded-full"></div>
+            <div class="absolute bottom-[30%] left-[75%] w-3 h-3 bg-accent rounded-full"></div>
+            
+            <div class="absolute bottom-[55%] left-[20%] w-3 h-3 bg-dark rounded-full"></div>
+            <div class="absolute bottom-[55%] left-[35%] w-3 h-3 bg-primary rounded-full"></div>
+            <div class="absolute bottom-[55%] left-[50%] w-3 h-3 bg-secondary rounded-full"></div>
+            <div class="absolute bottom-[55%] left-[65%] w-3 h-3 bg-accent rounded-full"></div>
+            <div class="absolute bottom-[55%] left-[80%] w-3 h-3 bg-dark rounded-full"></div>
+            
+            <!-- 蜡烛 -->
+            <div class="absolute top-[10%] left-[35%] w-4 h-16 bg-[#F5F5DC] rounded-sm"></div>
+            <div class="absolute top-[10%] left-[45%] w-4 h-16 bg-[#F5F5DC] rounded-sm"></div>
+            <div class="absolute top-[10%] left-[55%] w-4 h-16 bg-[#F5F5DC] rounded-sm"></div>
+            
+            <!-- 蜡烛顶部 -->
+            <div class="absolute top-[8%] left-[35%] w-4 h-2 bg-[#FF0000] rounded-full"></div>
+            <div class="absolute top-[8%] left-[45%] w-4 h-2 bg-[#FF0000] rounded-full"></div>
+            <div class="absolute top-[8%] left-[55%] w-4 h-2 bg-[#FF0000] rounded-full"></div>
+          </div>
+          
+          <!-- 蜡烛火焰效果 -->
+          <div class="absolute top-[-10px] left-1/2 transform -translate-x-1/2 flex gap-12">
+            <div class="candle-flame w-3 h-6 bg-secondary rounded-full"></div>
+            <div class="candle-flame w-3 h-6 bg-secondary rounded-full" style="animation-delay: 0.2s"></div>
+            <div class="candle-flame w-3 h-6 bg-secondary rounded-full" style="animation-delay: 0.4s"></div>
+          </div>
+        </div>
+        
+        <!-- 蛋糕光晕 - 更柔和 -->
+        <div class="absolute inset-0 bg-secondary/30 rounded-xl blur-3xl -z-10 animate-pulse-slow"></div>
+        
+        <!-- 吹蜡烛按钮 - 强化互动 -->
+        <button id="blowCandleBtn" class="mt-8 bg-primary hover:bg-primary/80 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center mx-auto gap-2">
+          <span class="icon icon-wind"></span> 吹灭蜡烛，许下心愿
+        </button>
+        
+        <!-- 心愿输入框 - 让寿星写下心愿 -->
+        <div class="mt-6 max-w-md mx-auto">
+          <textarea id="wishInput" placeholder="悄悄写下你的生日心愿（仅你可见）" 
+                    class="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 text-light placeholder-white/60 w-full text-center focus:outline-none focus:ring-2 focus:ring-secondary h-20 resize-none"></textarea>
+          <div class="mt-2 text-light/70 text-sm">心愿会在吹蜡烛后保存</div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 亲友祝福区域 - 聚焦给寿星的祝福 -->
+    <section class="mb-20 fade-in">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] mb-12 text-center text-secondary text-shadow">
+        亲友为<span class="name-highlight" id="nameInSection"></span>送上的祝福
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 祝福卡片1 -->
+        <div class="card h-80">
+          <div class="card-inner">
+            <!-- 卡片正面 -->
+            <div class="card-front">
+              <!-- 优化的CSS绘制朋友头像 -->
+              <div class="w-24 h-24 rounded-full bg-gradient-to-br from-secondary to-primary mb-4 border-4 border-secondary/80 flex items-center justify-center shadow-lg shadow-secondary/20 animate-pulse-slow">
+                <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-inner">
+                  <span class="text-secondary font-bold text-4xl">友</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-secondary mb-2">小明</h3>
+              <p class="text-light/90">点击翻转查看祝福</p>
+              <span class="icon icon-repeat mt-4 text-accent animate-pulse"></span>
+            </div>
+            <!-- 卡片背面 -->
+            <div class="card-back">
+              <p class="text-xl italic text-light mb-6">"生日快乐，<span id="nameInCard1"></span>！愿你新的一岁充满阳光，前程似锦，所有梦想都能实现！"</p>
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center">
+                <span class="icon icon-heart text-2xl text-secondary"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 祝福卡片2 -->
+        <div class="card h-80">
+          <div class="card-inner">
+            <div class="card-front">
+              <!-- 优化的CSS绘制妈妈头像 -->
+              <div class="w-24 h-24 rounded-full bg-gradient-to-br from-accent to-pink-400 mb-4 border-4 border-secondary/80 flex items-center justify-center shadow-lg shadow-accent/20 animate-pulse-slow">
+                <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-inner">
+                  <span class="text-accent font-bold text-4xl">妈</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-secondary mb-2">妈妈</h3>
+              <p class="text-light/90">点击翻转查看祝福</p>
+              <span class="icon icon-repeat mt-4 text-accent animate-pulse"></span>
+            </div>
+            <div class="card-back">
+              <p class="text-xl italic text-light mb-6">"我的宝贝<span id="nameInCard2"></span>，生日快乐！愿你健康成长，学业有成，永远保持那颗纯真善良的心！"</p>
+              <!-- 优化的CSS绘制妈妈头像（背面） -->
+              <div class="w-20 h-20 rounded-full bg-gradient-to-br from-accent to-pink-400 mb-4 border-4 border-accent/80 flex items-center justify-center shadow-lg shadow-accent/20">
+                <div class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-inner">
+                  <span class="text-accent font-bold text-3xl">妈</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-secondary">妈妈</h3>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 祝福卡片3 -->
+        <div class="card h-80">
+          <div class="card-inner">
+            <div class="card-front">
+              <!-- 优化的CSS绘制朋友头像 -->
+              <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 mb-4 border-4 border-secondary/80 flex items-center justify-center shadow-lg shadow-blue-700/20 animate-pulse-slow">
+                <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-inner">
+                  <span class="text-blue-700 font-bold text-4xl">李</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-secondary mb-2">小李</h3>
+              <p class="text-light/90">点击翻转查看祝福</p>
+              <span class="icon icon-repeat mt-4 text-accent animate-pulse"></span>
+            </div>
+            <div class="card-back">
+              <p class="text-xl italic text-light mb-6">"生日快乐<span id="nameInCard3"></span>！新的一岁，愿你学习进步，前程似锦，我们的友谊永存！"</p>
+              <!-- 优化的CSS绘制朋友头像（背面） -->
+              <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-700 to-blue-500 mb-4 border-4 border-accent/80 flex items-center justify-center shadow-lg shadow-blue-700/20">
+                <div class="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center shadow-inner">
+                  <span class="text-blue-700 font-bold text-3xl">李</span>
+                </div>
+              </div>
+              <h3 class="text-xl font-bold text-secondary">小李</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 礼物区域 - 专属惊喜 -->
+    <section class="mb-20 text-center fade-in">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] mb-12 text-secondary text-shadow">
+        拆开给<span class="name-highlight" id="nameInGift">你</span>的惊喜礼物
+      </h2>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- 礼物1 -->
+        <div class="gift-box group relative cursor-pointer" data-gift="神秘礼物" data-message="愿你每天都有小惊喜，快乐常伴左右！">
+          <div class="bg-primary/80 backdrop-blur-md rounded-xl p-8 h-64 flex flex-col items-center justify-center shadow-xl transform group-hover:scale-105 transition-all duration-300">
+            <div class="gift-ribbon w-16 h-16 relative mb-4">
+              <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-full bg-secondary"></div>
+              <div class="absolute top-1/2 left-0 transform -translate-y-1/2 w-full h-3 bg-secondary"></div>
+              <div class="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-8 h-8 bg-secondary rotate-45"></div>
+            </div>
+            <h3 class="text-xl font-bold text-light">神秘礼物</h3>
+            <p class="text-light/80 mt-2">点击拆开</p>
+          </div>
+          <div class="gift-overlay absolute inset-0 bg-dark/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+            <span class="icon icon-gift text-4xl text-secondary text-glow"></span>
+          </div>
+        </div>
+        
+        <!-- 礼物2 -->
+        <div class="gift-box group relative cursor-pointer" data-gift="惊喜红包" data-message="愿你财运亨通，财源滚滚来！">
+          <div class="bg-secondary/80 backdrop-blur-md rounded-xl p-8 h-64 flex flex-col items-center justify-center shadow-xl transform group-hover:scale-105 transition-all duration-300">
+            <div class="gift-ribbon w-16 h-16 relative mb-4">
+              <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-full bg-primary"></div>
+              <div class="absolute top-1/2 left-0 transform -translate-y-1/2 w-full h-3 bg-primary"></div>
+              <div class="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-8 h-8 bg-primary rotate-45"></div>
+            </div>
+            <h3 class="text-xl font-bold text-light">惊喜红包</h3>
+            <p class="text-light/80 mt-2">点击拆开</p>
+          </div>
+          <div class="gift-overlay absolute inset-0 bg-dark/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+            <span class="icon icon-money text-4xl text-secondary text-glow"></span>
+          </div>
+        </div>
+        
+        <!-- 礼物3 -->
+        <div class="gift-box group relative cursor-pointer" data-gift="精美礼品" data-message="愿这份小礼物带给你好心情！">
+          <div class="bg-accent/80 backdrop-blur-md rounded-xl p-8 h-64 flex flex-col items-center justify-center shadow-xl transform group-hover:scale-105 transition-all duration-300">
+            <div class="gift-ribbon w-16 h-16 relative mb-4">
+              <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-full bg-light"></div>
+              <div class="absolute top-1/2 left-0 transform -translate-y-1/2 w-full h-3 bg-light"></div>
+              <div class="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-8 h-8 bg-light rotate-45"></div>
+            </div>
+            <h3 class="text-xl font-bold text-light">精美礼品</h3>
+            <p class="text-light/80 mt-2">点击拆开</p>
+          </div>
+          <div class="gift-overlay absolute inset-0 bg-dark/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+            <span class="icon icon-diamond text-4xl text-secondary text-glow"></span>
+          </div>
+        </div>
+        
+        <!-- 礼物4 -->
+        <div class="gift-box group relative cursor-pointer" data-gift="专属特权" data-message="愿你新岁事事顺心，心想事成！">
+          <div class="bg-dark/80 backdrop-blur-md rounded-xl p-8 h-64 flex flex-col items-center justify-center shadow-xl transform group-hover:scale-105 transition-all duration-300">
+            <div class="gift-ribbon w-16 h-16 relative mb-4">
+              <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-3 h-full bg-secondary"></div>
+              <div class="absolute top-1/2 left-0 transform -translate-y-1/2 w-full h-3 bg-secondary"></div>
+              <div class="absolute top-[-8px] left-1/2 transform -translate-x-1/2 w-8 h-8 bg-secondary rotate-45"></div>
+            </div>
+            <h3 class="text-xl font-bold text-light">专属特权</h3>
+            <p class="text-light/80 mt-2">点击拆开</p>
+          </div>
+          <div class="gift-overlay absolute inset-0 bg-dark/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm">
+            <span class="icon icon-star text-4xl text-secondary text-glow"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 留言板 - 寿星专属许愿墙 -->
+    <section class="mb-20 fade-in">
+      <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] mb-8 text-center text-secondary text-shadow">
+        <span class="name-highlight" id="nameInWish">你</span>的专属许愿墙
+      </h2>
+      
+      <div class="max-w-2xl mx-auto bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-xl">
+        <form id="wishForm" class="space-y-4">
+          <div>
+            <label for="wishName" class="block text-light mb-2 text-lg">你的名字</label>
+            <input type="text" id="wishName" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-light placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="请输入你的名字">
+          </div>
+          
+          <div>
+            <label for="wishContent" class="block text-light mb-2 text-lg">你的祝福/心愿</label>
+            <textarea id="wishContent" rows="4" class="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-light placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-secondary" placeholder="写下对自己的祝福或心愿..."></textarea>
+          </div>
+          
+          <button type="submit" class="w-full bg-secondary hover:bg-secondary/80 text-dark font-bold py-3 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2">
+            <span class="icon icon-paper-plane"></span> 发送祝福
+          </button>
+        </form>
+        
+        <!-- 祝福列表 -->
+        <div id="wishList" class="mt-8 space-y-4">
+          <!-- 示例祝福 -->
+          <div class="wish-item bg-white/5 p-4 rounded-lg border border-white/10">
+            <div class="flex justify-between items-center mb-2">
+              <h4 class="font-bold text-secondary text-lg">访客</h4>
+              <span class="text-light/60 text-sm">刚刚</span>
+            </div>
+            <p class="text-light">祝你生日快乐，天天开心，万事如意！</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 底部 -->
+    <footer class="text-center py-8 text-light/70 fade-in">
+      <p class="text-lg">祝 <span class="name-highlight" id="nameInFooter">你</span> 生日快乐 | 愿快乐与你相伴每一天</p>
+      <div class="mt-4 flex justify-center gap-4">
+        <a href="#" class="text-light/70 hover:text-secondary transition-colors duration-300" id="shareBtn">
+          <span class="icon icon-share text-xl"></span>
+        </a>
+        <a href="#" class="text-light/70 hover:text-secondary transition-colors duration-300" id="likeBtn">
+          <span class="icon icon-heart text-xl"></span>
+        </a>
+        <a href="#" class="text-light/70 hover:text-secondary transition-colors duration-300" id="downloadBtn">
+          <span class="icon icon-download text-xl"></span>
+        </a>
+      </div>
+      <p class="mt-4 text-sm">© 2025 专属生日祝福 | 永远为你闪耀</p>
+    </footer>
+  </div>
+  
+  <!-- 模态框：许愿成功 -->
+  <div id="wishModal" class="modal fixed inset-0 bg-black/70 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+    <div class="modal-content bg-white/10 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95">
+      <div class="text-center">
+        <div class="w-20 h-20 bg-accent/30 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="icon icon-star text-4xl text-secondary text-glow"></span>
+        </div>
+        <h3 class="text-2xl font-bold text-secondary mb-4">许愿成功！</h3>
+        <p class="text-light text-lg mb-6" id="modalWishText">你的心愿已经飞向星空，愿它早日实现！</p>
+        <button id="closeModalBtn" class="bg-secondary hover:bg-secondary/80 text-dark font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-300">
+          确定
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 礼物模态框 -->
+  <div id="giftModal" class="modal fixed inset-0 bg-black/70 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+    <div class="modal-content bg-white/10 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95">
+      <div class="text-center">
+        <div class="w-24 h-24 bg-primary/30 rounded-full flex items-center justify-center mx-auto mb-6">
+          <span class="icon icon-gift text-5xl text-secondary text-glow"></span>
+        </div>
+        <h3 class="text-2xl font-bold text-secondary mb-2" id="giftName">礼物名称</h3>
+        <p class="text-light text-lg mb-6" id="giftMessage">祝你生日快乐！</p>
+        <button id="closeGiftModalBtn" class="bg-secondary hover:bg-secondary/80 text-dark font-bold py-2 px-6 rounded-full shadow-lg transition-all duration-300">
+          收下礼物
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // 初始化日期显示
+    function initDate() {
+      const now = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+      document.getElementById('currentDate').textContent = now.toLocaleDateString('zh-CN', options);
+    }
+    
+    // 计算年龄（可选功能，需要输入生日）
+    function calculateAge(birthYear) {
+      if (!birthYear) return '开启新岁';
+      const currentYear = new Date().getFullYear();
+      const age = currentYear - birthYear;
+      return `${age}岁生日快乐`;
+    }
+    
+    // 原生JS实现粒子背景效果
+    function initParticles() {
+      const container = document.getElementById('particles');
+      if (!container) return;
+      
+      const particleCount = 80; // 粒子数量
+      const colors = ['#FF6B8B', '#FFD166', '#06D6A0', '#118AB2', '#F8F9FA'];
+      
+      // 创建粒子
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // 随机大小
+        const size = Math.random() * 8 + 2;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        // 随机颜色
+        particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // 随机初始位置
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.top = `${Math.random() * 100}vh`;
+        
+        // 随机动画延迟和持续时间
+        particle.style.animationDelay = `${Math.random() * 10}s`;
+        particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        
+        // 随机透明度
+        particle.style.opacity = Math.random() * 0.6 + 0.2;
+        
+        container.appendChild(particle);
+      }
+      
+      // 窗口大小调整时重新定位粒子
+      window.addEventListener('resize', () => {
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach(particle => {
+          particle.style.left = `${Math.random() * 100}vw`;
+        });
+      });
+    }
+    
+    // 创建烟花效果
+    function createFirework(x, y) {
+      const colors = ['#FF6B8B', '#FFD166', '#06D6A0', '#118AB2', '#F8F9FA'];
+      const fireworkCount = 15;
+      
+      for (let i = 0; i < fireworkCount; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        
+        // 随机颜色
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        firework.style.backgroundColor = color;
+        firework.style.color = color;
+        
+        // 随机位置和大小
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 100 + 50;
+        const size = Math.random() * 8 + 4;
+        
+        firework.style.width = `${size}px`;
+        firework.style.height = `${size}px`;
+        firework.style.left = `${x}px`;
+        firework.style.top = `${y}px`;
+        
+        // 动画
+        firework.style.transform = `translate(${(Math.cos(angle) * distance)}px, ${(Math.sin(angle) * distance)}px) scale(1)`;
+        
+        document.body.appendChild(firework);
+        
+        // 移除烟花元素
+        setTimeout(() => {
+          firework.remove();
+        }, 1000);
+      }
+    }
+    
+    // 创建彩带效果
+    function createConfetti(count = 50) {
+      const container = document.getElementById('confetti-container');
+      if (!container) return;
+      
+      const colors = ['#FF6B8B', '#FFD166', '#06D6A0', '#118AB2', '#F8F9FA', '#FF4757', '#70A1FF'];
+      
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // 随机颜色
+        confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // 随机大小
+        const size = Math.random() * 6 + 4;
+        confetti.style.width = `${size}px`;
+        confetti.style.height = `${size}px`;
+        
+        // 随机初始位置
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.top = `${-Math.random() * 50 - 10}px`;
+        
+        // 随机动画延迟和持续时间
+        confetti.style.animationDelay = `${Math.random() * 5}s`;
+        confetti.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        
+        // 随机旋转
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        container.appendChild(confetti);
+        
+        // 移除彩带元素
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+    
+    // 吹蜡烛功能
+    function initCandleBlow() {
+      const blowBtn = document.getElementById('blowCandleBtn');
+      const flames = document.querySelectorAll('.candle-flame');
+      const modal = document.getElementById('wishModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const wishInput = document.getElementById('wishInput');
+      const modalWishText = document.getElementById('modalWishText');
+      
+      let candlesBlown = false;
+      
+      blowBtn.addEventListener('click', () => {
+        if (candlesBlown) return;
+        
+        // 获取心愿内容
+        const wishText = wishInput.value.trim() || '愿你心想事成，万事如意';
+        modalWishText.textContent = wishText;
+        
+        // 吹灭蜡烛动画
+        flames.forEach((flame, index) => {
+          setTimeout(() => {
+            flame.style.opacity = '0';
+            flame.style.transform = 'scale(0)';
+          }, index * 150);
+        });
+        
+        // 创建烟花效果（以蛋糕为中心）
+        setTimeout(() => {
+          const cake = document.querySelector('.card img');
+          const rect = cake.getBoundingClientRect();
+          const x = rect.left + rect.width / 2;
+          const y = rect.top + rect.height / 2;
+          
+          createFirework(x, y);
+          createConfetti(100);
+          
+          // 显示许愿成功模态框
+          setTimeout(() => {
+            modal.classList.add('show');
+          }, 500);
+          
+          candlesBlown = true;
+          blowBtn.innerHTML = '<span class="icon icon-check"></span> 心愿已许下';
+          blowBtn.disabled = true;
+          blowBtn.classList.add('bg-accent');
+          blowBtn.classList.remove('bg-primary', 'hover:bg-primary/80');
+        }, 800);
+      });
+      
+      // 关闭模态框
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+      });
+    }
+    
+    // 昵称自定义功能
+    function initNickname() {
+      const nicknameInput = document.getElementById('nicknameInput');
+      const nameDisplay = document.getElementById('nameDisplay');
+      const nameInSection = document.getElementById('nameInSection');
+      const nameInGift = document.getElementById('nameInGift');
+      const nameInWish = document.getElementById('nameInWish');
+      const nameInFooter = document.getElementById('nameInFooter');
+      const nameInCard1 = document.getElementById('nameInCard1');
+      const nameInCard2 = document.getElementById('nameInCard2');
+      const nameInCard3 = document.getElementById('nameInCard3');
+      const birthdayPerson = document.getElementById('birthdayPerson');
+      
+      // 所有需要替换昵称的元素
+      const nameElements = [
+        nameDisplay, nameInSection, nameInGift, nameInWish, 
+        nameInFooter, nameInCard1, nameInCard2, nameInCard3, birthdayPerson
+      ];
+      
+      nicknameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const nickname = nicknameInput.value.trim();
+          if (nickname) {
+            nameElements.forEach(el => {
+              if (el.id === 'nameInCard2') {
+                el.textContent = nickname + '，';
+              } else if (el.id === 'nameInCard3') {
+                el.textContent = nickname + '！';
+              } else {
+                el.textContent = nickname;
+              }
+            });
+            
+            // 显示成功提示
+            nicknameInput.value = '';
+            nicknameInput.placeholder = `已设置为：${nameDisplay.textContent}`;
+            
+            // 触发彩带效果
+            createConfetti(30);
+          }
+        }
+      });
+    }
+    
+    // 礼物打开功能
+    function initGifts() {
+      const giftBoxes = document.querySelectorAll('.gift-box');
+      const giftModal = document.getElementById('giftModal');
+      const closeGiftModalBtn = document.getElementById('closeGiftModalBtn');
+      const giftName = document.getElementById('giftName');
+      const giftMessage = document.getElementById('giftMessage');
+      
+      giftBoxes.forEach(box => {
+        box.addEventListener('click', () => {
+          // 礼物打开动画
+          box.classList.add('gift-open');
+          
+          // 设置礼物信息
+          giftName.textContent = box.dataset.gift;
+          giftMessage.textContent = box.dataset.message;
+          
+          // 创建彩带效果
+          createConfetti(80);
+          
+          // 显示礼物模态框
+          setTimeout(() => {
+            giftModal.classList.add('show');
+          }, 300);
+          
+          // 防止重复点击
+          box.style.pointerEvents = 'none';
+        });
+      });
+      
+      // 关闭礼物模态框
+      closeGiftModalBtn.addEventListener('click', () => {
+        giftModal.classList.remove('show');
+      });
+    }
+    
+    // 滚动动画
+    function initScrollAnimation() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+    }
+    
+    // 留言功能
+    function initWishForm() {
+      const wishForm = document.getElementById('wishForm');
+      const wishList = document.getElementById('wishList');
+      const wishName = document.getElementById('wishName');
+      const wishContent = document.getElementById('wishContent');
+      const modal = document.getElementById('wishModal');
+      const modalWishText = document.getElementById('modalWishText');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      
+      wishForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const name = wishName.value.trim() || '匿名祝福';
+        const content = wishContent.value.trim() || '祝你生日快乐！';
+        
+        if (content) {
+          // 创建新留言
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+          
+          const wishItem = document.createElement('div');
+          wishItem.className = 'wish-item bg-white/5 p-4 rounded-lg border border-white/10';
+          wishItem.innerHTML = `
+            <div class="flex justify-between items-center mb-2">
+              <h4 class="font-bold text-secondary text-lg">${name}</h4>
+              <span class="text-light/60 text-sm">${timeStr}</span>
+            </div>
+            <p class="text-light">${content}</p>
+          `;
+          
+          // 添加到列表最前面
+          wishList.insertBefore(wishItem, wishList.firstChild);
+          
+          // 清空表单
+          wishName.value = '';
+          wishContent.value = '';
+          
+          // 显示成功模态框
+          modalWishText.textContent = '祝福已成功发送，愿美好如期而至！';
+          modal.classList.add('show');
+          
+          // 创建彩带效果
+          createConfetti(50);
+        }
+      });
+      
+      // 关闭模态框
+      closeModalBtn.addEventListener('click', () => {
+        modal.classList.remove('show');
+      });
+    }
+    
+    // 音乐控制功能
+    function initMusic() {
+      const musicBtn = document.getElementById('musicBtn');
+      let audio = null;
+      let isPlaying = false;
+      
+      musicBtn.addEventListener('click', () => {
+        if (!audio) {
+          // 创建音频元素（使用示例音频链接）
+          audio = new Audio('https://actions.google.com/sounds/v1/celebrations/birthday_song_short.ogg');
+          audio.loop = true;
+          audio.volume = 0.5;
+        }
+        
+        if (isPlaying) {
+          audio.pause();
+          musicBtn.innerHTML = '<span class="icon icon-music text-2xl text-secondary text-glow"></span>';
+        } else {
+          audio.play().catch(err => {
+            console.log('音乐播放失败:', err);
+            alert('请点击页面后再尝试播放音乐');
+          });
+          musicBtn.innerHTML = '<span class="icon icon-pause text-2xl text-secondary text-glow"></span>';
+        }
+        
+        isPlaying = !isPlaying;
+      });
+    }
+    
+    // 分享功能
+    function initShare() {
+      const shareBtn = document.getElementById('shareBtn');
+      
+      shareBtn.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: `祝${document.getElementById('nameDisplay').textContent}生日快乐`,
+            text: `快来为${document.getElementById('nameDisplay').textContent}送上生日祝福吧！`,
+            url: window.location.href,
+          }).catch(err => {
+            console.log('分享失败:', err);
+            copyToClipboard();
+          });
+        } else {
+          copyToClipboard();
+        }
+      });
+      
+      // 复制链接功能
+      function copyToClipboard() {
+        navigator.clipboard.writeText(window.location.href).then(() => {
+          alert('链接已复制，快去分享给朋友吧！');
+        }).catch(err => {
+          console.log('复制失败:', err);
+          alert('复制失败，请手动复制链接');
+        });
+      }
+    }
+    
+    // 点赞功能
+    function initLike() {
+      const likeBtn = document.getElementById('likeBtn');
+      let liked = false;
+      
+      likeBtn.addEventListener('click', () => {
+        if (liked) {
+          likeBtn.innerHTML = '<span class="icon icon-heart text-xl"></span>';
+          likeBtn.classList.remove('text-primary');
+        } else {
+          likeBtn.innerHTML = '<span class="icon icon-heart text-xl"></span>';
+          likeBtn.classList.add('text-primary');
+          createConfetti(30);
+        }
+        
+        liked = !liked;
+      });
+    }
+    
+    // 下载功能（保存为图片）
+    function initDownload() {
+      const downloadBtn = document.getElementById('downloadBtn');
+      
+      downloadBtn.addEventListener('click', () => {
+        alert('生日祝福卡片已保存！（实际项目中可使用html2canvas实现截图下载）');
+        createConfetti(30);
+      });
+    }
+    
+    // 初始化所有功能
+    window.addEventListener('DOMContentLoaded', () => {
+      initDate();
+      initParticles();
+      initCandleBlow();
+      initNickname();
+      initGifts();
+      initScrollAnimation();
+      initWishForm();
+      initMusic();
+      initShare();
+      initLike();
+      initDownload();
+      
+      // 初始创建一些彩带
+      setTimeout(() => {
+        createConfetti(50);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
