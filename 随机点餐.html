@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点餐系统 - 选择困难症救星</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#f72585',
+                        secondary: '#7209b7',
+                        accent: '#4cc9f0',
+                        food: '#f8961e',
+                    },
+                    animation: {
+                        'spin-fast': 'spin 0.3s linear infinite',
+                        'bounce-food': 'bounce 0.5s ease-in-out infinite alternate',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-pink-50 to-purple-100 min-h-screen flex flex-col items-center justify-center p-4">
+    <!-- 头部标题 -->
+    <header class="w-full max-w-4xl text-center mb-8">
+        <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-primary flex items-center justify-center gap-3">
+            <i class="fa fa-cutlery text-food animate-bounce-food"></i>
+            <span>随机点餐神器</span>
+        </h1>
+        <p class="text-gray-600 mt-2 text-[clamp(1rem,2vw,1.2rem)]">纠结吃什么？一键随机搞定！</p>
+    </header>
+
+    <!-- 核心功能区 -->
+    <main class="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6 md:p-8">
+        <!-- 菜品导入区 -->
+        <div class="mb-8">
+            <label class="block text-gray-700 font-medium mb-2">添加菜品（一行一个）</label>
+            <div class="flex gap-3">
+                <input type="text" id="foodInput" placeholder="输入菜品名称" 
+                    class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all">
+                <button id="addFoodBtn" class="bg-primary hover:bg-secondary text-white py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fa fa-plus"></i> 添加
+                </button>
+            </div>
+            <textarea id="foodList" rows="3" placeholder="火锅&#10;烧烤&#10;麻辣烫&#10;炸鸡&#10;牛肉面" 
+                class="w-full mt-3 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all resize-none"></textarea>
+            <div class="flex gap-3 mt-3">
+                <button id="saveFoodBtn" class="flex-1 bg-accent hover:bg-accent/80 text-white py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fa fa-save"></i> 保存菜品
+                </button>
+                <button id="clearFoodBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 px-4 rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fa fa-trash"></i> 清空菜品
+                </button>
+            </div>
+        </div>
+
+        <!-- 已选菜品区 -->
+        <div class="mb-8">
+            <h3 class="text-gray-700 font-medium mb-3 flex items-center gap-2">
+                <i class="fa fa-list text-food"></i> 已选菜品
+            </h3>
+            <div id="foodTags" class="flex flex-wrap gap-2">
+                <!-- 动态生成菜品标签 -->
+            </div>
+        </div>
+
+        <!-- 结果显示区 -->
+        <div class="relative h-48 md:h-64 flex items-center justify-center bg-gradient-to-r from-primary/10 to-food/10 rounded-xl mb-8 overflow-hidden">
+            <div id="resultDisplay" class="text-[clamp(2.5rem,8vw,4rem)] font-bold text-food text-center transition-all duration-500 flex flex-col items-center">
+                <span>点击开始</span>
+                <span class="text-sm text-gray-500 mt-2">随机选今天吃什么</span>
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+                <i class="fa fa-utensils absolute top-5 left-10 text-primary/20 text-5xl rotate-12"></i>
+                <i class="fa fa-coffee absolute bottom-5 right-10 text-food/20 text-5xl -rotate-12"></i>
+                <i class="fa fa-birthday-cake absolute top-1/2 right-1/4 text-secondary/20 text-4xl rotate-45"></i>
+            </div>
+        </div>
+
+        <!-- 控制按钮区 -->
+        <div class="flex gap-4">
+            <button id="startFoodBtn" class="flex-1 bg-food hover:bg-food/90 text-white py-3 px-6 rounded-lg transition-all text-lg font-medium flex items-center justify-center gap-2 shadow-lg shadow-food/20">
+                <i class="fa fa-random"></i> 随机选择
+            </button>
+            <button id="excludeBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 px-6 rounded-lg transition-all text-lg font-medium flex items-center justify-center gap-2">
+                <i class="fa fa-ban"></i> 排除当前
+            </button>
+        </div>
+
+        <!-- 历史记录 -->
+        <div class="mt-8">
+            <h3 class="text-gray-700 font-medium mb-2 flex items-center gap-2">
+                <i class="fa fa-history text-accent"></i> 近期选择
+            </h3>
+            <div id="historyList" class="h-20 overflow-y-auto p-3 border border-gray-200 rounded-lg text-gray-600 space-y-1">
+                暂无记录
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部说明 -->
+    <footer class="mt-8 text-gray-500 text-sm text-center">
+        <p>支持自定义菜品 | 排除已吃选项 | 记录历史选择</p>
+    </footer>
+
+    <script>
+        // 核心逻辑
+        const foodInput = document.getElementById('foodInput');
+        const foodList = document.getElementById('foodList');
+        const foodTags = document.getElementById('foodTags');
+        const resultDisplay = document.getElementById('resultDisplay');
+        const startFoodBtn = document.getElementById('startFoodBtn');
+        const excludeBtn = document.getElementById('excludeBtn');
+        const addFoodBtn = document.getElementById('addFoodBtn');
+        const saveFoodBtn = document.getElementById('saveFoodBtn');
+        const clearFoodBtn = document.getElementById('clearFoodBtn');
+        const historyList = document.getElementById('historyList');
+
+        let foods = [];
+        let history = [];
+        let isRolling = false;
+        let rollInterval = null;
+        let excludedFood = '';
+
+        // 初始化默认菜品
+        foodList.value = `火锅\n烧烤\n麻辣烫\n炸鸡\n牛肉面\n披萨\n寿司\n汉堡\n冒菜\n米线`;
+        initFoods();
+
+        // 初始化菜品列表
+        function initFoods() {
+            foods = foodList.value.trim().split('\n').filter(food => food.trim() !== '');
+            renderFoodTags();
+            if (foods.length === 0) {
+                resultDisplay.innerHTML = '<span>请添加菜品</span><span class="text-sm text-gray-500 mt-2">输入后点击保存</span>';
+                resultDisplay.classList.add('text-gray-400');
+            } else {
+                resultDisplay.classList.remove('text-gray-400');
+            }
+        }
+
+        // 渲染菜品标签
+        function renderFoodTags() {
+            foodTags.innerHTML = '';
+            foods.forEach((food, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'bg-primary/10 text-primary px-3 py-1 rounded-full text-sm flex items-center gap-2 hover:bg-primary/20 transition-all cursor-pointer';
+                tag.innerHTML = `${food} <i class="fa fa-times text-xs hover:text-red-500"></i>`;
+                tag.addEventListener('click', () => {
+                    foods.splice(index, 1);
+                    foodList.value = foods.join('\n');
+                    renderFoodTags();
+                });
+                foodTags.appendChild(tag);
+            });
+        }
+
+        // 添加菜品
+        addFoodBtn.addEventListener('click', () => {
+            const food = foodInput.value.trim();
+            if (food && !foods.includes(food)) {
+                foods.push(food);
+                foodList.value = foods.join('\n');
+                renderFoodTags();
+                foodInput.value = '';
+                foodInput.focus();
+            }
+        });
+
+        // 保存菜品
+        saveFoodBtn.addEventListener('click', initFoods);
+
+        // 清空菜品
+        clearFoodBtn.addEventListener('click', () => {
+            foodList.value = '';
+            foods = [];
+            renderFoodTags();
+        });
+
+        // 随机选择
+        startFoodBtn.addEventListener('click', () => {
+            if (foods.length === 0) {
+                alert('请先添加菜品！');
+                return;
+            }
+            if (isRolling) return;
+
+            isRolling = true;
+            startFoodBtn.disabled = true;
+            resultDisplay.classList.add('text-secondary');
+
+            // 过滤排除的菜品
+            const availableFoods = foods.filter(food => food !== excludedFood);
+            if (availableFoods.length === 0) availableFoods.push(...foods);
+
+            // 快速滚动效果
+            rollInterval = setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * availableFoods.length);
+                resultDisplay.innerHTML = `<span>${availableFoods[randomIndex]}</span>`;
+            }, 80);
+
+            // 3秒后停止
+            setTimeout(() => {
+                clearInterval(rollInterval);
+                isRolling = false;
+                startFoodBtn.disabled = false;
+                resultDisplay.classList.remove('text-secondary');
+                resultDisplay.classList.add('text-food');
+
+                // 最终结果
+                const finalIndex = Math.floor(Math.random() * availableFoods.length);
+                const finalFood = availableFoods[finalIndex];
+                resultDisplay.innerHTML = `<span>${finalFood}</span><span class="text-sm text-gray-500 mt-2">今天就吃它！</span>`;
+
+                // 记录历史
+                history.unshift(`【${new Date().toLocaleDateString()}】${finalFood}`);
+                if (history.length > 5) history.pop();
+                updateHistory();
+
+                // 播放音效
+                const successSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
+                successSound.volume = 0.5;
+                successSound.play().catch(() => {});
+            }, 3000);
+        });
+
+        // 排除当前菜品
+        excludeBtn.addEventListener('click', () => {
+            const currentFood = resultDisplay.querySelector('span:first-child')?.textContent;
+            if (currentFood && currentFood !== '点击开始' && currentFood !== '请添加菜品') {
+                excludedFood = currentFood;
+                alert(`已排除「${currentFood}」，下次不会再选`);
+            }
+        });
+
+        // 更新历史记录
+        function updateHistory() {
+            if (history.length === 0) {
+                historyList.innerHTML = '暂无记录';
+                return;
+            }
+            historyList.innerHTML = history.map(item => `<div class="flex justify-between items-center p-1 border-b border-gray-100">
+                <span>${item}</span>
+                <i class="fa fa-check text-green-500"></i>
+            </div>`).join('');
+        }
+
+        // 回车添加菜品
+        foodInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addFoodBtn.click();
+        });
+    </script>
+</body>
+</html>
