@@ -6,8 +6,8 @@
 
 ## 在线访问
 
-- **生日快乐页面**: [https://你的用户名.github.io/brithday/生日快乐.html](https://你的用户名.github.io/brithday/生日快乐.html)
-- **生日祝福页面**: [https://你的用户名.github.io/brithday/生日祝福.html](https://你的用户名.github.io/brithday/生日祝福.html)
+- **生日快乐页面**: [https://yanbingyu1222.github.io/myProject/生日快乐.html](https://yanbingyu1222.github.io/myProject/生日快乐.html)
+- **生日祝福页面**: [https://yanbingyu1222.github.io/myProject/生日祝福.html](https://yanbingyu1222.github.io/myProject/生日祝福.html)
 
 ## 功能特色
 
